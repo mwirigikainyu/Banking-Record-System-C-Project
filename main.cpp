@@ -3,8 +3,8 @@
 #include <random>
 #include <string>
 #include <vector>
+#include "users.cpp"
 using namespace std;
-
 
 // Use the file handling mechanism in C++ to develop a simple console application.
 // TODO: Operations: New account, deposit & withdraw amount, balance inquiry, loan request, close account, exit
@@ -12,33 +12,7 @@ using namespace std;
 void signUp();
 bool authentication(int option, string n, string p, string e);
 
-class Account
-{
-    string name;
-    string email;
-    string password;
-    int accountNumber;
 
-public:
-    Account()
-    {
-        srand(time(0));
-        accountNumber = rand();
-    }
-    string getName() { return name; }
-    void setName(string n) { name = n; }
-    string getEmail() { return email; }
-    void setEmail(string e) { email = e; }
-    string getPassword() { return password; }
-    void setPassword(string p) { password = p; }
-    void getAccountReport()
-    {
-        cout << endl
-             << "**Full Report**\nName:" << name << endl;
-        cout << "Email:" << email << endl;
-        cout << "Account Number:" << accountNumber << endl;
-    }
-};
 
 void signUp()
 {
@@ -75,28 +49,29 @@ void signUp()
 
 bool authentication(int option, string n, string p, string e)
 {
+    string db = "users.txt";
     bool exists = false;
     if (option == 1)
     {
-        ifstream loginFile("login.txt", ios::in);
+        ifstream loginFile(db, ios::in);
         string username, password, email;
-        vector<Account> accountDetails;
-        Account user;
+        vector<User> users;
+        User user;
         while (loginFile)
         {
             loginFile >> username >> password >> email;
             user.setName(username);
             user.setPassword(password);
             user.setEmail(email);
-            accountDetails.push_back(user);
+            users.push_back(user);
         }
         loginFile.close();
 
-        for (Account a : accountDetails)
+        for (User user : users)
         {
-            if (a.getName() == n)
+            if (user.getName() == n)
             {
-                if (a.getPassword() == p)
+                if (user.getPassword() == p)
                 {
                     exists = true;
                 }
@@ -107,7 +82,7 @@ bool authentication(int option, string n, string p, string e)
     {
         try
         {
-            ofstream loginFile("login.txt", ios::trunc);
+            ofstream loginFile(db, ios::trunc);
             loginFile << n << " " << p << " " << e << endl;
             loginFile.close();
             signUp();

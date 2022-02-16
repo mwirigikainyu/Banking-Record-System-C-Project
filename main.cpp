@@ -10,13 +10,17 @@ using namespace std;
 // Use the file handling mechanism in C++ to develop a simple console application.
 // TODO: Operations: New account, deposit & withdraw amount, balance inquiry, loan request, close account, exit
 
-void signUp();
+void signUp(string message);
 bool authentication(int option, string n, string p, string e);
 
-void signUp()
+void signUp(string message)
 {
     string username, password, email;
     int first_option;
+    if (!message.empty())
+    {
+        cout << message << endl;
+    }
     cout << "Welcome to Premier Bank, Please login/sign up to continue.\n1.Login\n2.SignUp\n0.EXIT" << endl;
     cin >> first_option;
     if (first_option == 1)
@@ -27,9 +31,10 @@ void signUp()
         getline(cin, username);
         cout << "Password: ";
         getline(cin, password);
-        if (authentication(first_option, username, password, email)) {
+        if (authentication(first_option, username, password, email))
+        {
             system("clear");
-            cout<< "Successfully logged in. \nWelcome " <<username <<"!" <<endl;
+            cout << "Successfully logged in. \nWelcome " << username << "!" << endl;
         }
     }
     else if (first_option == 2)
@@ -61,7 +66,7 @@ bool authentication(int option, string n, string p, string e)
         User user;
         while (getline(loginFile, clientDetails))
         {
-            vector <string> details;
+            vector<string> details;
             stringstream stream_details(clientDetails);
             while (stream_details.good())
             {
@@ -74,18 +79,30 @@ bool authentication(int option, string n, string p, string e)
             user.setEmail(details.at(2));
             users.push_back(user);
         }
-        
+
         loginFile.close();
+
+        bool userFound = false;
 
         for (User user : users)
         {
             if (user.getName() == n)
             {
+                userFound = true;
                 if (user.getPassword() == p)
                 {
                     exists = true;
                 }
+                else
+                {
+                    signUp("Wrong password");
+                }
             }
+        }
+
+        if (!userFound)
+        {
+            signUp("User not found");
         }
     }
     else if (option == 2)
@@ -95,7 +112,7 @@ bool authentication(int option, string n, string p, string e)
             ofstream loginFile(db, ios::app);
             loginFile << n << "," << p << "," << e << endl;
             loginFile.close();
-            signUp();
+            signUp("");
         }
         catch (exception const &e)
         {
@@ -107,5 +124,5 @@ bool authentication(int option, string n, string p, string e)
 
 int main()
 {
-    signUp();
+    signUp("");
 }

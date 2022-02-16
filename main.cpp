@@ -2,6 +2,7 @@
 #include <fstream>
 #include <random>
 #include <string>
+#include <sstream>
 #include <vector>
 #include "users.cpp"
 using namespace std;
@@ -11,8 +12,6 @@ using namespace std;
 
 void signUp();
 bool authentication(int option, string n, string p, string e);
-
-
 
 void signUp()
 {
@@ -57,17 +56,25 @@ bool authentication(int option, string n, string p, string e)
     if (option == 1)
     {
         ifstream loginFile(db, ios::in);
-        string username, password, email;
         vector<User> users;
+        string clientDetails;
         User user;
-        while (loginFile)
+        while (getline(loginFile, clientDetails))
         {
-            loginFile >> username >> password >> email;
-            user.setName(username);
-            user.setPassword(password);
-            user.setEmail(email);
+            vector <string> details;
+            stringstream stream_details(clientDetails);
+            while (stream_details.good())
+            {
+                string substr;
+                getline(stream_details, substr, ',');
+                details.push_back(substr);
+            }
+            user.setName(details.at(0));
+            user.setPassword(details.at(1));
+            user.setEmail(details.at(2));
             users.push_back(user);
         }
+        
         loginFile.close();
 
         for (User user : users)
@@ -86,7 +93,7 @@ bool authentication(int option, string n, string p, string e)
         try
         {
             ofstream loginFile(db, ios::app);
-            loginFile << n << " " << p << " " << e << endl;
+            loginFile << n << "," << p << "," << e << endl;
             loginFile.close();
             signUp();
         }

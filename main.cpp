@@ -5,10 +5,10 @@
 #include <vector>
 using namespace std;
 
-/*
-Use the file handling mechanism in C++ to develop a simple console application.
-New account, deposit & withdraw amount, balance inquiry, loan request, close account, exit
-*/
+
+// Use the file handling mechanism in C++ to develop a simple console application.
+// TODO: Operations: New account, deposit & withdraw amount, balance inquiry, loan request, close account, exit
+
 void signUp();
 bool authentication(int option, string n, string p, string e);
 

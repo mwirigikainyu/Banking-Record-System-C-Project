@@ -28,7 +28,10 @@ void signUp()
         getline(cin, username);
         cout << "Password: ";
         getline(cin, password);
-        cout << authentication(first_option, username, password, email) <<endl;
+        if (authentication(first_option, username, password, email)) {
+            system("clear");
+            cout<< "Successfully logged in. \nWelcome " <<username <<"!" <<endl;
+        }
     }
     else if (first_option == 2)
     {
@@ -39,7 +42,7 @@ void signUp()
         getline(cin, password);
         cout << "What is your Email: " << endl;
         getline(cin, email);
-        cout << authentication(first_option, username, password, email)<<endl;
+        authentication(first_option, username, password, email);
     }
     else
     {
@@ -82,7 +85,7 @@ bool authentication(int option, string n, string p, string e)
     {
         try
         {
-            ofstream loginFile(db, ios::trunc);
+            ofstream loginFile(db, ios::app);
             loginFile << n << " " << p << " " << e << endl;
             loginFile.close();
             signUp();

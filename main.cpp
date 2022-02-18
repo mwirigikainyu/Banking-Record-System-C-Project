@@ -25,7 +25,7 @@ void signUp(string message)
     cin >> first_option;
     if (first_option == 1)
     {
-        system("clear");
+        system("cls");
         cout << "Username: ";
         cin.ignore();
         getline(cin, username);
@@ -33,7 +33,7 @@ void signUp(string message)
         getline(cin, password);
         if (authentication(first_option, username, password, email))
         {
-            system("clear");
+            system("cls");
             cout << "Successfully logged in. \nWelcome " << username << "!" << endl;
         }
     }
